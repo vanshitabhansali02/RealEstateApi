@@ -2,6 +2,7 @@
 using DataAcess.DTOs;
 using DataAcess.Models;
 using Microsoft.AspNetCore.Mvc;
+using Services.DTOs;
 
 namespace RealEstateApi.Mapping
 {
@@ -9,7 +10,9 @@ namespace RealEstateApi.Mapping
     {
       public  Mapping()
         {
-            CreateMap<UserDto, User>();
+            CreateMap<CreateUserDto, User>();
+            CreateMap<CreateUserDto,Agent>().ReverseMap();
+           CreateMap<LoginUserDto,User>().ReverseMap();
             CreateMap<PropertyDto,Property>().ReverseMap();
         }
     }

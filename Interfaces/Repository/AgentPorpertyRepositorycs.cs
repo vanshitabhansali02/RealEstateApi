@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace Repository.Repository
 {
-    public class PropertyRepository : GenericRepository<Property>, IPropertyRepository
+    public class AgentPorpertyRepository:GenericRepository<AgentProperty>,IAgentPropertyRepository
+
     {
-        public PropertyRepository(ApplicationDbContext context) : base(context) { }
+        public AgentPorpertyRepository(ApplicationDbContext context) : base(context) { }
 
     }
 }

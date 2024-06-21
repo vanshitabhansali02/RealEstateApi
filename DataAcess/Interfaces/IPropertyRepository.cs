@@ -5,11 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.Interface
+namespace DataAcess.Interfaces
 {
-    public  interface ILoginInterface<T> where T : class
+    public interface IPropertyRepository : IGenericRepository<Property>
     {
-        Task AddAsync(T entity);
-
     }
 }

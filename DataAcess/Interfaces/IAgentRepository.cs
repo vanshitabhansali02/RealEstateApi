@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository.IRepository
+namespace DataAcess.Interfaces
 {
-    public  interface IPropertyRepository
+    public interface IAgentRepository: IGenericRepository<Agent>
     {
-        void CreateProperty(Property property);
+
     }
 }

@@ -1,24 +1,27 @@
 ﻿using DataAcess.Data;
-using Interfaces.IInterfaces;
+using DataAcess.Interfaces;
+using DataAcess.Models;
+using Microsoft.EntityFrameworkCore;
+using Repository.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interfaces.Interfaces
+namespace Repository.Repository
 {
     
-    public  class LoginRepository
+    public  class LoginRepository : GenericRepository<User>, ILoginRepository
     {
-        private readonly ApplicationDbContext _context;
-        public LoginRepository(ApplicationDbContext applicationDbContext)
+        public LoginRepository(ApplicationDbContext context) : base(context) { }
+        public async Task<User> GetByUsername(string email)
         {
-            _context = applicationDbContext;
-
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
-
-      
-    
+        public async Task<Agent> GetAgentByUsername(string email)
+        {
+            return await _context.Agents.FirstOrDefaultAsync(a => a.Email == email);
+        }
     }
 }

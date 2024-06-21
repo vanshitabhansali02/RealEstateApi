@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using DataAcess.CustomModel;
 using DataAcess.DTOs;
 using DataAcess.Models;
-using Interfaces.IInterfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services;
+using Services.DTOs;
 using Services.Interface;
+using Services.Services;
 
 namespace RealEstateApi.Controllers
 {
@@ -13,29 +15,24 @@ namespace RealEstateApi.Controllers
     public class LoginController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly ILoginInterface<User> _logininterface;
-        private readonly IPropertyInterface _propertyInterface;
-
-        public LoginController(IMapper mapper, IPropertyInterface propertyInterface,ILoginInterface<User> loginInterface)
+        private readonly ILoginService _loginService;
+        public LoginController(IMapper mapper,  ILoginService userService)
         {
             _mapper = mapper;
-            _logininterface = loginInterface;
-            _propertyInterface = propertyInterface;
-
+            _loginService = userService;
 
         }
-        [HttpPost(nameof(AddAgent))]
-        public async Task<ActionResult> AddAgent([FromBody] UserDto user)
+        [HttpPost(nameof(CreateAgent))]
+        public async Task<ActionResult> CreateAgent([FromBody] CreateUserDto userdto)
         {
-            if (user == null)
+            if (userdto == null)
             {
                 return BadRequest("User data is null.");
             }
             try
-            { 
-                    var userdata = _mapper.Map<User>(user);
-                   await _logininterface.AddAsync(userdata);
-                    return Ok();
+            {
+                await _loginService.CreateAgent(userdto);
+                return Ok();
                 
             }
             catch (Exception ex)
@@ -45,102 +42,54 @@ namespace RealEstateApi.Controllers
             }
 
         }
-        //[HttpPost(nameof(AddAgent))]
-        //public async Task<ActionResult> LoginUser([FromBody] LoginUserDto user)
-        //{
-        //    if (user == null)
-        //    {
-        //        return BadRequest("User data is null.");
-        //    }
-        //    try
-        //    {
-        //        var authenticatedUser = await _userService.AuthenticateAsync(user.Email, user.Password);
 
-        //        if (authenticatedUser == null)
-        //        {
-        //            // If authentication fails
-        //            return Unauthorized("Invalid username or password.");
-        //        }
-
-        //        // If authentication succeeds
-        //        return Ok("Login successful");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
-        //    }
-
-
-        //}
-        [HttpGet(nameof(GetProperties))]
-        public async Task<ActionResult<List<PropertyDto>>> GetProperties()
+        [HttpPost(nameof(CreateUser))]
+        public async Task<ActionResult> CreateUser([FromBody] CreateUserDto userdto)
         {
+            if (userdto == null)
+            {
+                return BadRequest("User data is null.");
+            }
             try
             {
-                var properties = await _propertyInterface.GetAllPropertyAsync();
-                return Ok(properties);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
-            }
-        }
-        [HttpGet(nameof(GetPropertiesDetails))]
-        public async Task<ActionResult<Property>> GetPropertiesDetails(int propertyid)
-        {
-            try
-            {
-                var properties = await _propertyInterface.GetAllPropertyDetailsAsync(propertyid);
-                return Ok(properties);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
-            }
-        }
-        [HttpPost(nameof(CreateProperty))]
-        public async Task<ActionResult> CreateProperty(Property property)
-        {
-            if(property==null) throw new ArgumentNullException(nameof(property));
-            try
-            {
-               await _propertyInterface.AddPropertyAsync(property);
+                await _loginService.CreateUser(userdto);
                 return Ok();
-            }
-            catch(Exception ex) {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
-            }
-        }
-        [HttpPost(nameof(GetPropertyListByAgentId))]
-        public async Task<ActionResult<PropertyDto>> GetPropertyListByAgentId(int id)
-        {
-            if (id == null) throw new ArgumentNullException(nameof(GetPropertyListByAgentId));
-            try
-            {
-                var res= await _propertyInterface.GetPropertyListByAgentId(id);
-                return Ok(res);
+
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+
             }
+
         }
-        [HttpPost(nameof(AddEnquiry))]
-        public async Task<ActionResult> AddEnquiry(Enquiry enquiry)
+        [HttpPost(nameof(LoginUser))]
+        public async Task<ActionResult> LoginUser([FromBody] LoginUserDto userdto)
         {
-           await _propertyInterface.AddEnquiry(enquiry);
-            return Ok();
+            if (userdto == null)
+            {
+                return BadRequest("User data is null.");
+            }
+            try
+            {
+                var res= await _loginService.LoginUser(userdto);
+                if(res==null)
+                {
+                    return Unauthorized("Invalid username or password.");
+
+                }
+                return Ok(res);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+
+            }
 
         }
-
-        [HttpPost(nameof(GetEnquiry))]
-        public ActionResult GetEnquiry(int id)
-        {
-
-            var res=_propertyInterface.GetEnquiry(id);
-            return Ok(res);
-        }
-
+       
+     
 
     }
 }

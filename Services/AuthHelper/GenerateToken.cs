@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interfaces.IInterfaces
+namespace Services.AuthHelper
 {
-    public  interface IGenericRepositroy<T>where T : class
+    internal class GenerateToken
     {
-        public void  Add(T entity);
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAcess.DTOs
+namespace Services.DTOs
 {
     public class PropertyDto
     {

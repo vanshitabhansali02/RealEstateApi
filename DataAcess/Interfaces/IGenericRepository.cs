@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAcess.IRepository.Repositroy
+namespace DataAcess.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public  interface IGenericRepository<T> where T : class
     {
-        void Add(T entity); 
+        void Add(T entity);
     }
 }
