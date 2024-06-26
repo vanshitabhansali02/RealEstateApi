@@ -6,7 +6,7 @@ using DataAcess.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Services.DTOs;
-using Services.Interface;
+using Services.IServices;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -62,13 +62,13 @@ namespace Services.Services
             if (user != null && VerifyPassword(loginUser.Password, user.Password)|| agent==null)
             {
 
-                var token = GenerateJwtToken(user);
+                var token = GenerateJwtToken(user,agent);
                 return new AuthResponseDto
                 {
                     Token = token,
-                    Expiration = DateTime.UtcNow.AddHours(1),
+                    Expiration = DateTime.UtcNow.AddHours(5),
                     UserId=user.Id,
-                    agen=agent?.AgentId
+                    AgentId=agent?.AgentId  
 
 
                 };
@@ -90,12 +90,14 @@ namespace Services.Services
             var hashedInputPassword = HashPassword(password);
             return hashedInputPassword == hashedPassword;
         }
-        private string GenerateJwtToken(User user)
+        private string GenerateJwtToken(User user,Agent agent)
         {
             var claims = new[]
             {
             new Claim(ClaimTypes.Name, user.Id.ToString()),
-            new Claim(ClaimTypes.Role,user.RoleId.ToString())       
+            new Claim(ClaimTypes.Role,user.RoleId.ToString()) ,
+            new Claim("AgentId",agent.AgentId.ToString()),
+            
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -104,7 +106,7 @@ namespace Services.Services
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
+                expires: DateTime.UtcNow.AddSeconds(20),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

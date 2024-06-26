@@ -3,7 +3,7 @@ using DataAcess.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs;
-using Services.Interface;
+using Services.IServices;
 
 namespace RealEstateApi.Controllers
 {
@@ -11,7 +11,7 @@ namespace RealEstateApi.Controllers
     [Route("api/RealEstateApi")]
     public class PropertyController : Controller
     {
-        private readonly IPropertyService _propertyInterface;
+        private readonly IPropertyService _propertyInterface;   
 
         public PropertyController(IPropertyService propertyService)
         {
@@ -19,12 +19,12 @@ namespace RealEstateApi.Controllers
         }
         [HttpGet(nameof(GetProperties))]
 
-        public async Task<ActionResult<List<PropertyDto>>> GetProperties([FromQuery] Paginationparameters paginationparameters)
+        public async Task<ActionResult<List<PropertyDto>>> GetProperties([FromQuery] Paginationparameters paginationparameters,string searchvalue)
         {
             try
             {
                 
-                var properties = await _propertyInterface.GetAllPropertyAsync(paginationparameters);
+                var properties = await _propertyInterface.GetAllPropertyAsync(paginationparameters, searchvalue);
                 return Ok(properties);
             }
             catch (Exception ex)
@@ -34,7 +34,7 @@ namespace RealEstateApi.Controllers
         }
         [Authorize(Roles = "2,1")]
         [HttpGet(nameof(GetPropertiesDetails))]
-        public async Task<ActionResult<Property>> GetPropertiesDetails(int propertyid)
+        public async Task<ActionResult<PropertyDto>> GetPropertiesDetails(int propertyid)
         {
             try
             {
@@ -92,6 +92,15 @@ namespace RealEstateApi.Controllers
             var res = _propertyInterface.GetEnquiry(id);
             return Ok(res);
         }
+      
+        [HttpGet(nameof(CreateChart))]
+        public IActionResult CreateChart()
+        {
+            var res = _propertyInterface.CreateChart();
+            return Ok(res);
+
+        }
+
 
     }
 }

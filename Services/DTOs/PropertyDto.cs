@@ -10,7 +10,10 @@ namespace Services.DTOs
     {
         public int ID { get; set; }
         public string? LandMark { get; set; }
-        public int Price { get; set; }
+        public long? Price { get; set; }
+        public string? Image { get; set; }
         public string? Location { get; set; }
+        public double Latutide { get;set; }
+        public double Longitude { get; set; }
     }
 }

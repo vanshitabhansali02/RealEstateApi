@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAcess", "DataAcess\Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{95F87DF3-5333-4A40-8C64-105F056F86BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Interfaces\Repository.csproj", "{D9BD3332-8454-4089-B6B8-D7664A8BD5B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Interfaces\Repository.csproj", "{D9BD3332-8454-4089-B6B8-D7664A8BD5B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

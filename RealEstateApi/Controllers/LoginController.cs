@@ -5,7 +5,7 @@ using DataAcess.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs;
-using Services.Interface;
+using Services.IServices;
 using Services.Services;
 
 namespace RealEstateApi.Controllers

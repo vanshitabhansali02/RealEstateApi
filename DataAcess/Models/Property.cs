@@ -43,6 +43,9 @@ public partial class Property
     [Column("id")]
     public int Id1 { get; set; }
 
+    [Column(TypeName = "character varying")]
+    public string? Image { get; set; }
+
     [InverseProperty("Property")]
     public virtual ICollection<AgentProperty> AgentProperties { get; set; } = new List<AgentProperty>();
 
